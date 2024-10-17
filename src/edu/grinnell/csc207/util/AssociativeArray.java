@@ -115,7 +115,7 @@ public class AssociativeArray<K, V> {
     } else {
       this.expand();
       this.pairs[this.size] = new KVPair<K,V>(key, value);
-      this.size+=1;
+      this.size += 1;
     } // else
   } // set(K,V)
 

@@ -56,13 +56,13 @@ public class AACMappings implements AACPage {
 				try {
 					line = eyes.readLine();
 				} catch (IOException e) {
-					// catch error
-				}
-				if (line == null) {
 					invalid = true;
-				} else {
+				}
+				if (line == null || line.equals("")) {
+					invalid = true;
+				} else if (invalid != true) {
 					// break up line into parts
-					String[] strArr = " ".split(line);
+					String[] strArr = line.split(" ");
 					// if creating a new category
 					if (strArr[0].charAt(0) != '>') {
 						try {
@@ -70,15 +70,15 @@ public class AACMappings implements AACPage {
 							String catStr = "";
 							for(int i = 1; i < strArr.length; i++) {
 								if (i < strArr.length - 1) {
-									catStr.concat(strArr[i] + " ");
+									catStr = catStr.concat(strArr[i] + " ");
 								} else {
-									catStr.concat(strArr[i]);
+									catStr = catStr.concat(strArr[i]);
 								} // if/else
 							} // for
 							this.catsAA.set(strArr[0], new AACCategory(catStr));
 							recCat = strArr[0];
 						} catch (NullKeyException e) {
-							// shouldn't happen, but declare
+							// should not happen
 						} // try/catch
 						// else if creating a new internal category
 					} else {
@@ -86,9 +86,9 @@ public class AACMappings implements AACPage {
 						String catStr = "";
 						for(int i = 1; i < strArr.length; i++) {
 							if (i < strArr.length - 1) {
-								catStr.concat(strArr[i] + " ");
+								catStr = catStr.concat(strArr[i] + " ");
 							} else {
-								catStr.concat(strArr[i]);
+								catStr = catStr.concat(strArr[i]);
 							} // if/else
 						} // for
 						// set to most recent created category
@@ -120,12 +120,12 @@ public class AACMappings implements AACPage {
 	 * category
 	 */
 	public String select(String imageLoc) {
-		if (this.current.equals("")) {
+		if (this.current.getCategory().equals("")) {
 			try {
-				this.current = catsAA.get(imageLoc);
+				this.current = this.catsAA.get(imageLoc);
 				return "";
 			} catch (Exception e) {
-				// should not happen, but checking
+				// should not happen
 			} // try/catch
 		} // if
 		return this.current.select(imageLoc);
@@ -137,7 +137,7 @@ public class AACMappings implements AACPage {
 	 * it should return an empty array
 	 */
 	public String[] getImageLocs() {
-		if (this.current.getCategory().equals("")) {
+		if ((this.current.getCategory()).equals("")) {
 			if (catsAA.size() == 0) {
 				return new String[]{};
 			} // if
